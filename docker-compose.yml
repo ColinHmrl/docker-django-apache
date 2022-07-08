@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  django:
+    build: ./django_project/
+    restart: always
+    environment:
+      DJANGO_ADMIN_USERNAME: admin # admin user name
+      DJANGO_ADMIN_PASSWORD: admin # admin password
+      PROJECT_DIR: /var/www/app
+      PROJECT_NAME: django_project
+      DJANGO_CONFIG: django_project.settings.prod # name of the settings file
+    volumes:
+      - ./django_project/:/var/www/app/django_project/
+    networks:
+      django_app:
+        ipv4_address: 172.10.0.5 # ip address of the container for the /etc/hosts, needed to use proxy on the host 
+
+networks:
+  django_app:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.10.0.0/16
